@@ -1,12 +1,20 @@
+import logging
 from chalice import Chalice
 
-app = Chalice(app_name='app')
+app = Chalice(app_name='chalice-example')
 
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)  # make logger.info works
 
 @app.route('/')
 def index():
     return {'hello': 'world'}
 
+@app.schedule('rate(1 minute)')
+def say_hello_every_minute(event):
+    logger.info('hello world!')
+
+    return True
 
 # The view function above will return {"hello": "world"}
 # whenever you make an HTTP GET request to '/'.
